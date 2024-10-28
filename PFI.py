@@ -3,7 +3,7 @@ def menu ():
     
     print("--------------------Menu--------------------")
     print("--------------------------------------------")    
-    print("""1) Agregar producto. \n2) Mostrar productos. \n3) Actualizar cantidad de producto. \n4) Eliminar producto. \n5) Buscar producto. \n6) Reporte de bajo stock. \n7) Salir.""")
+    print("""1) Agregar producto al inventario. \n2) Mostrar productos del inventario. \n3) Actualizar cantidad de producto. \n4) Eliminar producto. \n5) Buscar producto. \n6) Reporte de bajo stock. \n7) Salir.""")
     print("--------------------------------------------")
 
 
@@ -34,11 +34,15 @@ def seleccion (opcion, inventario):
     if opcion == 1:
         agregar_productos(inventario)     
     elif opcion == 2:
-        print("********************Productos********************")
-        for prod in inventario:
-            print(f"ID: \t{prod[0]} \nProducto: {prod[1]} \nDescripción: {prod[2]} \nCantidad: {prod[3]} \nPrecio: {prod[4]} \nCategoría: {prod[5]}")
-            print("*************************************************")
-        print("_________________________________________________")
+        print("")
+        print("--------------------Productos--------------------")
+        print("-------------------------------------------------")
+        for producto in inventario:
+            print(f"ID: \t{producto[0]} \nProducto: {producto[1]} \nDescripción: {producto[2]} \nCantidad: {producto[3]} \nPrecio: {producto[4]} \nCategoría: {producto[5]}")
+            print("- - - - - - - - - - - - - - - - - - - - - - - - -")
+        print("-------------------------------------------------")
+        print("")
+        input("Presione enter para continuar...")
         print("")
     elif opcion == 3:
         print()        
@@ -47,7 +51,7 @@ def seleccion (opcion, inventario):
 
 # Agregar productos a la lista para empujarlos a la lista   
 def agregar_productos(inventario):
-  id_producto = int(input("Ingrese el id del producto: ")) #Ingresar algo para que no puedan romper el codigo ingresando caracteres
+  id_producto = input("Ingrese el id del producto: ")
   nombre_producto = input("Ingrese el nombre del producto: ")
   descripcion = input("Ingrese una pequeña descripción del producto: ")
   cantidad = validar_cantidad()
