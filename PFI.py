@@ -1,6 +1,5 @@
 #Menu principal
 def menu ():
-    
     print("--------------------Menu--------------------")
     print("--------------------------------------------")    
     print("""1) Agregar producto al inventario. \n2) Mostrar productos del inventario. \n3) Actualizar cantidad de producto. \n4) Eliminar producto. \n5) Buscar producto. \n6) Reporte de bajo stock. \n7) Salir.""")
@@ -19,6 +18,8 @@ def validar_opcion ():
         except ValueError:    
             print("Entrada no valida por favor ingrese una nuevamente.")  
 
+
+# Validar que la cantidad de un producto no sea cero
 def validar_cantidad():
     cantidad_producto = -1
     
@@ -28,26 +29,7 @@ def validar_cantidad():
              print("La cantidad de stock es incorrecta, no puede ingresar una cantidad inferior a uno, vuelva a intentarlo!")
          else:
              return cantidad_producto
-         
-# Selección del menu de opciónes         
-def seleccion (opcion, inventario):               
-    if opcion == 1:
-        agregar_productos(inventario)     
-    elif opcion == 2:
-        print("")
-        print("--------------------Productos--------------------")
-        print("-------------------------------------------------")
-        for producto in inventario:
-            print(f"ID: \t{producto[0]} \nProducto: {producto[1]} \nDescripción: {producto[2]} \nCantidad: {producto[3]} \nPrecio: {producto[4]} \nCategoría: {producto[5]}")
-            print("- - - - - - - - - - - - - - - - - - - - - - - - -")
-        print("-------------------------------------------------")
-        print("")
-        input("Presione enter para continuar...")
-        print("")
-    elif opcion == 3:
-        print()        
-    elif opcion == 6:
-        print("Llego a la opción 6!")
+
 
 # Agregar productos a la lista para empujarlos a la lista   
 def agregar_productos(inventario):
@@ -59,7 +41,34 @@ def agregar_productos(inventario):
   categoria = input("Ingrese la categoría del producto: ")
   producto = [id_producto, nombre_producto, descripcion, cantidad, precio, categoria]
   inventario.append(producto)
+
+
+# Mostrar productos
+def mostrar_productos(inventario):
+    print("")
+    print("--------------------Productos--------------------")
+    print("-------------------------------------------------")
+    for producto in inventario:
+        print(f"ID: \t{producto[0]} \nProducto: {producto[1]} \nDescripción: {producto[2]} \nCantidad: {producto[3]} \nPrecio: {producto[4]} \nCategoría: {producto[5]}")
+        print("- - - - - - - - - - - - - - - - - - - - - - - - -")
+    print("-------------------------------------------------")
+    print("")
+    input("Presione enter para continuar...")
+    print("")
     
+# Selección del menu de opciónes         
+def seleccion (opcion, inventario):               
+    if opcion == 1:
+        agregar_productos(inventario)     
+    elif opcion == 2:
+        mostrar_productos(inventario)
+    elif opcion == 3:
+        print()        
+    elif opcion == 6:
+        print("Llego a la opción 6!")
+
+
+# Programa principal    
 def programa ():
     inventario = []
     menu()
