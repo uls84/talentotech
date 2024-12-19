@@ -1,4 +1,10 @@
 import sqlite3
+#from colorama import init, Fore, Style, bajo_stock
+
+#init(autoreset=True)
+
+
+
 def mostrar_menu ():
     '''
     Función para invocar el menú
@@ -97,13 +103,13 @@ def mostrar_productos():
     if not productos:
         print("No hay productos en el inventario.")
     else:
-        encabezado = f"{'ID':<5} |{'Nombre':<30} |{'Descripcion':<30} |{'Stock':<10} |{'Precio':<10} |{'Categoria':<30}"
-        separador = "-" * lens(encabezado)
+        encabezado = f"{'ID':<3} |{'Nombre':<20} |{'Descripcion':<40} |{'Stock':<5} |{'Precio':<10} |{'Categoria':<20}"
+        separador = "-" * len(encabezado)
         print("Productos regristrados: ")
         print(encabezado)
         print(separador)
         for producto in productos:
-            print(f"{producto[0]:<5} |{producto[1]:<30} |{producto[2]:<30} |{producto[3]:<10} |{producto[4]:<10} |{producto[5]:<30}")
+            print(f"{producto[0]:<3} |{producto[1]:<20} |{producto[2]:<40} |{producto[3]:<5} |{producto[4]:<10} |{producto[5]:<20}")
         print("")
         input("Presione enter para continuar...")
         print(f"\n""")    
@@ -123,13 +129,18 @@ def eliminar_producto():
         WHERE id = ?
     '''
     id_producto = int(input("Ingrese el id del producto a borrar: "))
-    params = (id_producto,)
-    print("El producto se ha borrado de manera exitosa.")
-    cursor.execute(query,params)
-    conexion.commit()
-    print("Producto elimiado exitosamente!")
-    print(f"\t''")
-    conexion.close()
+    producto = buscar_producto(id_producto)
+    params = (producto,)
+    if producto:
+        cursor.execute(query,params)
+        conexion.commit()
+        conexion.close()
+        print(f"El producto con id '{id_producto}' ha sido elimiado el inventario!")
+        print("")
+        input("Presione enter para continuar...")
+        print(f"\n""")  
+    else:    
+        print(f"El producto con código '{id_producto}' no se encuentra en el inventario.")
 
 def actualizar_stock():
     '''
@@ -151,13 +162,12 @@ def actualizar_stock():
     conexion.commit()
     conexion.close()
     
-def buscar_producto():
+def buscar_producto(id_producto):
     '''
     Función que busca un producto dentro del inventario
     Args:
-        Ninguno
+        Id_producto: 
     '''
-    id_producto = int(input("Ingrese el id de producto a buscar: "))
     conexion = sqlite3.connect("inventario.db")
     cursor = conexion.cursor()
     query = '''
@@ -167,11 +177,16 @@ def buscar_producto():
     params = (id_producto,)
     cursor.execute(query,params)
     producto = cursor.fetchone()
-    print(producto)
-    conexion.close()
-    print("")
-    input("Presione enter para continuar...")
-    print(f"\n""")  
+    if producto:
+        print("")
+        print(f"{producto[0]:<3} |{producto[1]:<20} |{producto[2]:<40} |{producto[3]:<5} |{producto[4]:<10} |{producto[5]:<20}")
+        conexion.close()
+        print("")
+        input("Presione enter para continuar...")
+    else:
+        print("Producto no encontrado.")    
+        print("")
+        input("Presione enter para continuar...")  
 
 def reporte_bajo_stock():
     '''
@@ -222,7 +237,8 @@ def seleccion (opcion):
     elif opcion == 4:
         eliminar_producto()
     elif opcion == 5:
-        buscar_producto()    
+        id_producto = int(input("Ingrese el id del producto a buscar: "))
+        buscar_producto(id_producto)    
     elif opcion == 6:
         reporte_bajo_stock()
         
@@ -238,7 +254,7 @@ def crear_tabla():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nombre TEXT NOT NULL,
         descripcion TEXT,
-        cantidad INTEGER NOT NULL,
+        cantidad INTEGER NOT NULL CHECK(typeof(cantidad) = 'integer'),
         precio REAL NOT NULL,
         categoria TEXT NOT NULL
     )
